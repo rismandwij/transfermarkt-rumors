@@ -28,6 +28,7 @@ jobs:
         install.packages("rvest", dependencies = TRUE)
         install.packages("tidyverse", dependencies = TRUE)
         install.packages("binman")
+        install.packages("mongolite")
       shell: Rscript {0} 
     - name: Scrape Data Transfermarkt Rumour to MongoDB Atlas
       run: Rscript transfermarkt-rumour-scrape.R
