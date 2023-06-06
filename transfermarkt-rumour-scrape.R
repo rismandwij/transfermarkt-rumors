@@ -6,6 +6,7 @@ library(netstat)
 library(rvest)
 library(tidyverse)
 library(mongolite)
+library(binman)
 
 #Connect RSelenium
 message("Loading Selenium")
