@@ -23,27 +23,26 @@ remDr$navigate(url)
 jumlah_data<-10 #jumlah data yang akan diambil
 data_pemain<-data.frame(id=1:jumlah_data)
 rumor<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".hauptlink")
+
+
 rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist()
-rumor<-matrix(rumor,ncol=4,byrow=T)
-rumor<-rumor[1:jumlah_data,]
 #Mengambil nama pemain yang sedang dirumorkan
-data_pemain$nama_pemain<-rumor[,1]
+data_pemain$nama_pemain<-rumor[seq(1,4*jumlah_data,4)]
 #Mengambil nama klub asal dari pemain yang sedang dirumorkan
-data_pemain$klub_asal<-rumor[,2]   
+data_pemain$klub_asal<-rumor[seq(2,4*jumlah_data,4)]
 #Mengambil nama klub tujuan dari pemain yang sedang dirumorkan
-data_pemain$klub_rumor<-rumor[,3]
+data_pemain$klub_rumor<-rumor[seq(3,4*jumlah_data,4)]
 #Mengambil persentase rumor kepindahan pemain 
-data_pemain$persentase_rumor<-as.numeric(gsub("[^[:alnum:]]","",rumor[,4]))
+data_pemain$persentase_rumor<-as.numeric(gsub("[^[:alnum:]]","",rumor[seq(4,4*jumlah_data,4)]))
 
 rumor2<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes("table") %>% html_table()
 rumor2<-as.data.frame(rumor2[[1]])
 rumor2<-rumor2[,1]
 rumor2<-rumor2 %>% str_split("\n") %>% unlist()
-rumor2<-matrix(rumor2,ncol=2,byrow=T)
-rumor2<-str_squish(rumor2[,2])
+rumor2<-str_squish(rumor2)
 rumor2<-rumor2[rumor2!=""]
 #Mengambil posisi bermain dari pemain yang sedang dirumorkan 
-data_pemain$posisi<-rumor2[1:jumlah_data]
+data_pemain$posisi<-rumor2[seq(2,2*jumlah_data,2)]
 
 rumor3<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes("table") %>% html_table()
 rumor3<-as.data.frame(rumor3[[1]])
