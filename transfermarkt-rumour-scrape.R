@@ -23,7 +23,8 @@ remDr$navigate(url)
 jumlah_data<-10 #jumlah data yang akan diambil
 data_pemain<-data.frame(id=1:jumlah_data)
 rumor<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".hauptlink")
-rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist %>% matrix(ncol=4,byrow=T)
+rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist()
+rumor<-matrix(rumor,ncol=4,byrow=T)
 rumor<-rumor[1:jumlah_data,]
 #Mengambil nama pemain yang sedang dirumorkan
 data_pemain$nama_pemain<-rumor[,1]
@@ -37,7 +38,8 @@ data_pemain$persentase_rumor<-as.numeric(gsub("[^[:alnum:]]","",rumor[,4]))
 rumor2<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes("table") %>% html_table()
 rumor2<-as.data.frame(rumor2[[1]])
 rumor2<-rumor2[,1]
-rumor2<-rumor2 %>% str_split("\n") %>% unlist %>% matrix(ncol=2,byrow=T)
+rumor2<-rumor2 %>% str_split("\n") %>% unlist()
+rumor2<-matrix(rumor2,ncol=2,byrow=T)
 rumor2<-str_squish(rumor2[,2])
 rumor2<-rumor2[rumor2!=""]
 #Mengambil posisi bermain dari pemain yang sedang dirumorkan 
