@@ -23,8 +23,6 @@ remDr$navigate(url)
 jumlah_data<-10 #jumlah data yang akan diambil
 data_pemain<-data.frame(id=1:jumlah_data)
 rumor<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".hauptlink")
-
-
 rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist()
 #Mengambil nama pemain yang sedang dirumorkan
 data_pemain$nama_pemain<-rumor[seq(1,4*jumlah_data,4)]
