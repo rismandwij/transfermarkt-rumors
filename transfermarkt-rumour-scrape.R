@@ -23,13 +23,13 @@ remDr$navigate(url)
 rumor<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".hauptlink")
 rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist()
 #Mengambil nama pemain yang sedang dirumorkan
-nama_pemain<-rumor[seq(1,length(rumor),4)]
+nama_pemain<-rumor[seq(1,length(rumor),by=4)]
 #Mengambil nama klub asal dari pemain yang sedang dirumorkan
-klub_asal<-rumor[seq(2,length(rumor),4)]
+klub_asal<-rumor[seq(2,length(rumor),by=4)]
 #Mengambil nama klub tujuan dari pemain yang sedang dirumorkan
-klub_rumor<-rumor[seq(3,length(rumor),4)]
+klub_rumor<-rumor[seq(3,length(rumor),by=4)]
 #Mengambil persentase rumor kepindahan pemain 
-persentase_rumor<-as.numeric(gsub("[^[:alnum:]]","",rumor[seq(4,length(rumor),4)]))
+persentase_rumor<-as.numeric(gsub("[^[:alnum:]]","",rumor[seq(4,length(rumor),by=4)]))
 
 rumor2<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes("table") %>% html_table()
 rumor2<-as.data.frame(rumor2[[1]])
@@ -38,7 +38,7 @@ rumor2<-rumor2 %>% str_split("\n") %>% unlist()
 rumor2<-str_squish(rumor2)
 rumor2<-rumor2[rumor2!=""]
 #Mengambil posisi bermain dari pemain yang sedang dirumorkan 
-posisi<-rumor2[seq(2,length(rumor2),2)]
+posisi<-rumor2[seq(2,length(rumor2),by=2)]
 
 rumor3<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes("table") %>% html_table()
 rumor3<-as.data.frame(rumor3[[1]])
@@ -58,7 +58,7 @@ rumor6<-rumor6[seq(1,length(rumor6),4)] %>% html_text2()
 umur<-as.numeric(rumor6)
 
 rumor7<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".rechts") 
-rumor7<-rumor7[-c(1:2)]
+rumor7<-rumor7[-c(1,2)]
 rumor7<-rumor7[seq(1,length(rumor7),2)] %>% html_text2()
 #Mengambil harga pemain (dalam Euro) yang sedang dirumorkan
 harga_pemain<-gsub("[A-Za-z]","",rumor7)
