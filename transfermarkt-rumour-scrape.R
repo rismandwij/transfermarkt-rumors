@@ -20,20 +20,16 @@ remDr<-remote_drver$client
 message("Start Scraping")
 url<-"https://www.transfermarkt.com/premier-league/geruechte/wettbewerb/GB1/saison_id/2022/plus/1"
 remDr$navigate(url)
-jumlah_data<-10 #jumlah data yang akan diambil
-data_pemain<-data.frame(id=1:jumlah_data)
 rumor<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".hauptlink")
-
-
 rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist()
 #Mengambil nama pemain yang sedang dirumorkan
-data_pemain$nama_pemain<-rumor[seq(1,4*jumlah_data,4)]
+nama_pemain<-rumor[seq(1,length(rumor),4)]
 #Mengambil nama klub asal dari pemain yang sedang dirumorkan
-data_pemain$klub_asal<-rumor[seq(2,4*jumlah_data,4)]
+klub_asal<-rumor[seq(2,length(rumor),4)]
 #Mengambil nama klub tujuan dari pemain yang sedang dirumorkan
-data_pemain$klub_rumor<-rumor[seq(3,4*jumlah_data,4)]
+klub_rumor<-rumor[seq(3,length(rumor),4)]
 #Mengambil persentase rumor kepindahan pemain 
-data_pemain$persentase_rumor<-as.numeric(gsub("[^[:alnum:]]","",rumor[seq(4,4*jumlah_data,4)]))
+persentase_rumor<-as.numeric(gsub("[^[:alnum:]]","",rumor[seq(4,length(rumor),4)]))
 
 rumor2<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes("table") %>% html_table()
 rumor2<-as.data.frame(rumor2[[1]])
@@ -42,7 +38,7 @@ rumor2<-rumor2 %>% str_split("\n") %>% unlist()
 rumor2<-str_squish(rumor2)
 rumor2<-rumor2[rumor2!=""]
 #Mengambil posisi bermain dari pemain yang sedang dirumorkan 
-data_pemain$posisi<-rumor2[seq(2,2*jumlah_data,2)]
+posisi<-rumor2[seq(2,length(rumor2),2)]
 
 rumor3<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes("table") %>% html_table()
 rumor3<-as.data.frame(rumor3[[1]])
@@ -51,23 +47,25 @@ rumor4<-rumor4[is.na(rumor4)==FALSE]
 rumor5<-rumor3[,17]
 rumor5<-rumor5[is.na(rumor5)==FALSE]
 #Mengambil kontrak klub asal dari pemain yang sedang dirumorkan
-data_pemain$kontrak<-rumor4[1:jumlah_data]
+kontrak_habis<-rumor4
 #Mengambil waktu berita pemain yang sedang dirumorkan
-data_pemain$tanggal_rumor<-rumor5[1:jumlah_data]
+tanggal_rumor<-rumor5
 
 rumor6<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".zentriert") 
 rumor6<-rumor6[-c(1:5)]
 rumor6<-rumor6[seq(1,length(rumor6),4)] %>% html_text2()
 #Mengambil umur pemain yang sedang dirumorkan
-data_pemain$umur<-as.numeric(rumor6[1:jumlah_data])
+umur<-as.numeric(rumor6)
 
 rumor7<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".rechts") 
 rumor7<-rumor7[-c(1:2)]
 rumor7<-rumor7[seq(1,length(rumor7),2)] %>% html_text2()
-data_pemain$harga_pemain<-gsub("[A-Za-z]","",rumor7[1:jumlah_data])
-#Mengambil harga pemain (dalam Euro) yang sedang dirumorkan 
-data_pemain$harga_pemain<-as.numeric(gsub("€","",data_pemain$harga_pemain))
-data_pemain<-data_pemain[,-1]
+#Mengambil harga pemain (dalam Euro) yang sedang dirumorkan
+harga_pemain<-gsub("[A-Za-z]","",rumor7)
+harga_pemain<-as.numeric(gsub("€","",harga_pemain))
+
+data_pemain<-data.frame(tanggal_rumor,nama_pemain,umur,posisi,klub_asal,harga_pemain,kontrak_habis,klub_rumor,persentase_rumor)
+data_pemain<-data_pemain[1:10,]
 
 message("Connect to MongoDB Atlas")
 #MONGODB
