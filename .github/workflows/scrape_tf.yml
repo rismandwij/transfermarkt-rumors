@@ -2,7 +2,7 @@ name: Scraping
  
 on:
   schedule:
-    - cron: '*/10 * * * *'  # At 07:00 on every day-of-month
+    - cron: '*/7 * * * *'  # At 07:00 on every day-of-month
     
 jobs:
   rumor-scrape:
