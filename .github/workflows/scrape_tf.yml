@@ -3,6 +3,7 @@ name: Scraping
 on:
   schedule:
     - cron: '*/10 * * * *'  # At 07:00 on every day-of-month
+  workflow_dispatch:
     
 jobs:
   rumor-scrape:
