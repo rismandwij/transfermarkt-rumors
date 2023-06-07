@@ -20,6 +20,7 @@ remDr<-remote_drver$client
 message("Start Scraping")
 url<-"https://www.transfermarkt.com/premier-league/geruechte/wettbewerb/GB1/saison_id/2022/plus/1"
 remDr$navigate(url)
+print(remDr$getPageSource(url))
 rumor<-read_html(remDr$getPageSource(url)[[1]]) %>% html_nodes(".hauptlink")
 rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist()
 print(rumor)
