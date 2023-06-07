@@ -22,7 +22,7 @@ url<-"https://www.transfermarkt.com/premier-league/geruechte/wettbewerb/GB1/sais
 remDr$navigate(url)
 rumor<-read_html(remDr$getPageSource()[[1]]) %>% html_nodes(".hauptlink")
 rumor<-rumor %>% html_text2() %>% str_split("\n") %>% unlist()
-#Mengambil nama pemain yang sedang dirumorkan
+#Mengambil nama pemain yang sedang dirumorkan pindah
 nama_pemain<-rumor[seq(1,length(rumor),by=4)]
 #Mengambil nama klub asal dari pemain yang sedang dirumorkan
 klub_asal<-rumor[seq(2,length(rumor),by=4)]
